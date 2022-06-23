@@ -1869,10 +1869,10 @@ public class XmlUtil {
 	}
 
 	public static Document parseDocument(Reader reader) throws SAXException, IOException {
-		return parseDocument(reader, true);
+		return parseDocument(reader, true, false);
 	}
 
-	public static Document parseDocument(Reader theReader, boolean theNamespaceAware) throws SAXException, IOException {
+	public static Document parseDocument(Reader theReader, boolean theNamespaceAware, boolean allowDoctypeDeclaration) throws SAXException, IOException {
 		DocumentBuilder builder;
 		try {
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -1880,7 +1880,7 @@ public class XmlUtil {
 			docBuilderFactory.setXIncludeAware(false);
 			docBuilderFactory.setExpandEntityReferences(false);
 			try {
-				docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+				docBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", !allowDoctypeDeclaration);
 				docBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
 				docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
 				docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
