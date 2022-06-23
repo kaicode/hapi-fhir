@@ -12,7 +12,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Icd10LoaderTest {
@@ -35,17 +34,15 @@ public class Icd10LoaderTest {
 		assertEquals("A", chapterA.getCode());
 		assertEquals("Fruit", chapterA.getDisplay());
 
-		assertEquals("""
-						A "Fruit"
-						-A1-A3 "A1 to A3 type fruit"
-						--A1 "Apples"
-						--A2 "Pears"
-						--A3 "Bananas"
-						B "Trees"
-						-B1-B2 "A group of trees"
-						--B1 "Oak trees"
-						--B2 "Ash trees"
-                  """, toTree(rootConcepts));
+		assertEquals("A \"Fruit\"\n" +
+			"-A1-A3 \"A1 to A3 type fruit\"\n" +
+			"--A1 \"Apples\"\n" +
+			"--A2 \"Pears\"\n" +
+			"--A3 \"Bananas\"\n" +
+			"B \"Trees\"\n" +
+			"-B1-B2 \"A group of trees\"\n" +
+			"--B1 \"Oak trees\"\n" +
+			"--B2 \"Ash trees\"", toTree(rootConcepts));
 	}
 
 	private String toTree(List<TermConcept> concepts) {
@@ -57,7 +54,9 @@ public class Icd10LoaderTest {
 	}
 
 	private void toTree(TermConcept concept, int indent, StringBuilder buffer) {
-		buffer.append("-".repeat(indent));
+		for (int i = 0; i < indent; i++) {
+			buffer.append("-");
+		}
 		buffer.append(concept.getCode());
 		String display = concept.getDisplay();
 		if (display != null) {
