@@ -56,6 +56,16 @@
 		</repository>
 		-->
 		<repository>
+			<id>oss-release</id>
+			<url>https://oss.sonatype.org/content/repositories/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
 			<id>oss-snapshot</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 			<snapshots>
