@@ -2843,8 +2843,8 @@
 			<properties>
 				<surefire_jvm_args>-Dspring.test.context.cache.maxSize=2 -Dfile.encoding=UTF-8 -Xmx2648m -XX:-TieredCompilation -Xverify:none -Dfile.encoding=UTF-8 -Xss128M -XX:MetaspaceSize=512M -XX:MaxMetaspaceSize=2048M -XX:ReservedCodeCacheSize=220M</surefire_jvm_args>
 			</properties>
-			<build>
-				<plugins>
+			<!-- <build> -->
+<!-- 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-checkstyle-plugin</artifactId>
@@ -2866,7 +2866,7 @@
 						</executions>
 					</plugin>
 				</plugins>
-			</build>
+			</build> -->
 		</profile>
 		<profile>
 			<id>NOPARALLEL</id>
