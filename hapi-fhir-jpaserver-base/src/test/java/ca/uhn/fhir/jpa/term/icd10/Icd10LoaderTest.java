@@ -2,6 +2,7 @@ package ca.uhn.fhir.jpa.term.icd10;
 
 import ca.uhn.fhir.jpa.entity.TermCodeSystemVersion;
 import ca.uhn.fhir.jpa.entity.TermConcept;
+import ca.uhn.fhir.jpa.entity.TermConceptProperty;
 import ca.uhn.fhir.util.ClasspathUtil;
 import org.hl7.fhir.r4.model.CodeSystem;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,6 +35,10 @@ public class Icd10LoaderTest {
 		TermConcept chapterA = rootConcepts.get(0);
 		assertEquals("A", chapterA.getCode());
 		assertEquals("Fruit", chapterA.getDisplay());
+		Collection<TermConceptProperty> properties = chapterA.getProperties();
+		assertEquals(2, properties.size());
+		assertEquals("Include fruit", chapterA.getStringProperty("inclusion"));
+		assertEquals("Things that are not fruit", chapterA.getStringProperty("exclusion"));
 
 		assertEquals("A \"Fruit\"\n" +
 			"-A1-A3 \"A1 to A3 type fruit\"\n" +
@@ -42,7 +48,7 @@ public class Icd10LoaderTest {
 			"B \"Trees\"\n" +
 			"-B1-B2 \"A group of trees\"\n" +
 			"--B1 \"Oak trees\"\n" +
-			"--B2 \"Ash trees\"", toTree(rootConcepts));
+			"--B2 \"Ash trees\"\n", toTree(rootConcepts));
 	}
 
 	private String toTree(List<TermConcept> concepts) {

@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static ca.uhn.fhir.util.XmlUtil.getChildrenByTagName;
 import static ca.uhn.fhir.util.XmlUtil.parseDocument;
@@ -83,13 +85,21 @@ public class Icd10Loader {
 			TermConcept termConcept = rootConcept ? codeSystemVersion.addConcept() : new TermConcept();
 			termConcept.setCode(code);
 
-			// Grab first preferred label
-			getChildrenByTagName(aClass, "Rubric").stream()
-				.filter(rubric -> rubric.getAttribute("kind").equals("preferred"))
-				.map(preferredRubric -> getChildrenByTagName(preferredRubric, "Label"))
-				.flatMap(Collection::stream)
-				.findFirst()
-				.ifPresent(preferredLabel -> termConcept.setDisplay(preferredLabel.getTextContent()));
+			// Preferred label and other properties
+			for (Element rubric : getChildrenByTagName(aClass, "Rubric")) {
+				String kind = rubric.getAttribute("kind");
+				Optional<Element> firstLabel = getChildrenByTagName(rubric, "Label").stream().findFirst();
+				if (firstLabel.isPresent()) {
+					String textContent = firstLabel.get().getTextContent();
+					if (textContent != null && !textContent.isEmpty()) {
+						if (kind.equals("preferred")) {
+							termConcept.setDisplay(textContent);
+						} else {
+							termConcept.addPropertyString(kind, textContent);
+						}
+					}
+				}
+			}
 
 			for (Element superClass : getChildrenByTagName(aClass, "SuperClass")) {
 				TermConcept parent = conceptMap.get(superClass.getAttribute("code"));
