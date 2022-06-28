@@ -92,6 +92,7 @@ public class Icd10Loader {
 				if (firstLabel.isPresent()) {
 					String textContent = firstLabel.get().getTextContent();
 					if (textContent != null && !textContent.isEmpty()) {
+						textContent = textContent.replace("\n", "").replace("\r", "").replace("\t", "");
 						if (kind.equals("preferred")) {
 							termConcept.setDisplay(textContent);
 						} else {
